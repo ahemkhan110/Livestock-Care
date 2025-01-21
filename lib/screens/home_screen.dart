@@ -26,13 +26,14 @@ class _SensorDataPageState extends State<SensorDataPage> {
   void initState() {
     super.initState();
     fetchData();
-    timer = Timer.periodic(const Duration(seconds: 5), (Timer t) => fetchData());
+    timer =
+        Timer.periodic(const Duration(seconds: 5), (Timer t) => fetchData());
   }
 
   @override
   void dispose() {
-    super.dispose();
     timer?.cancel();
+    super.dispose();
   }
 
   Future<void> fetchData() async {
@@ -68,189 +69,185 @@ class _SensorDataPageState extends State<SensorDataPage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Livestock Care',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+        title: const Text(
+          'Farm Care',
+          style: TextStyle(
+              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
         ),
         centerTitle: true,
-        elevation: 0, // Remove elevation to match with the background
-        backgroundColor: Colors.blue, // Adjust the color to match the background
+        backgroundColor: Colors.teal.shade700,
       ),
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Colors.blue, Colors.green],
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/splash_image.jpg'),
+            fit: BoxFit.cover,
           ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SizedBox(height: 20),
-            Card(
-              elevation: 5,
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              child: Padding(
-                padding: EdgeInsets.all(20),
-                child: Column(
-                  children: [
-                    Text(
-                      'Body Temperature',
-                      style: TextStyle(fontSize: 12.0, color: Colors.black),
-                    ),
-                    SizedBox(height: 5),
-                    Text(
-                      temperature ?? 'Loading...',
-                      style: TextStyle(fontSize: 20.0,  fontWeight: FontWeight.bold,  color: Colors.black),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
-            Card(
-              elevation: 5,
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              child: Padding(
-                padding: EdgeInsets.all(20),
-                child: Column(
-                  children: [
-                    Text(
-                      'Heart Rate (BPM)',
-                      style: TextStyle(fontSize: 12.0, color: Colors.black),
-                    ),
-                    SizedBox(height: 5),
-                    Text(
-                      bpm ?? 'Loading...',
-                      style: TextStyle(fontSize: 20.0,  fontWeight: FontWeight.bold,  color: Colors.black),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
-            Card(
-              elevation: 5,
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              child: Padding(
-                padding: EdgeInsets.all(20),
-                child: Column(
-                  children: [
-                    Text(
-                      'Motion Activity',
-                      style: TextStyle(fontSize: 12.0, color: Colors.black),
-                    ),
-                    SizedBox(height: 5),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Column(
-                          children: [
-                            Text(
-                              'Motion X',
-                              style: TextStyle(fontSize: 16.0, color: Colors.black),
-                            ),
-                            Text(
-                              motionX ?? 'Loading...',
-                              style: TextStyle(fontSize: 16.0,  fontWeight: FontWeight.bold, color: Colors.black),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Text(
-                              'Motion Y',
-                              style: TextStyle(fontSize: 16.0,  color: Colors.black),
-                            ),
-                            Text(
-                              motionY ?? 'Loading...',
-                              style: TextStyle(fontSize: 16.0,  fontWeight: FontWeight.bold, color: Colors.black),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Text(
-                              'Motion Z',
-                              style: TextStyle(fontSize: 16.0, color: Colors.black),
-                            ),
-                            Text(
-                              motionZ ?? 'Loading...',
-                              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.black),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
-            Card(
-              elevation: 5,
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              child: Padding(
-                padding: EdgeInsets.all(20),
-                child: Column(
-                  children: [
-                    Text(
-                      'Motion Graph',
-                      style: TextStyle(fontSize: 12.0, color: Colors.black),
-                    ),
-                    Container(
-                      width: 300,
-                      height: 200,
-                      child: Stack(
-                        children: [
-                          // Container(
-                          //   decoration: BoxDecoration(
-                          //     color: Colors.black.withOpacity(0.3),
-                          //     borderRadius: BorderRadius.circular(16),
-                          //   ),
-                          // ),
-                          LineChart(
-                            LineChartData(
-                              gridData: FlGridData(show: false),
-                              titlesData: FlTitlesData(show: false),
-                              borderData: FlBorderData(show: false),
-                              lineBarsData: [
-                                LineChartBarData(
-                                  spots: [
-                                    FlSpot(0, double.tryParse(motionX ?? '0') ?? 0),
-                                    FlSpot(1, double.tryParse(motionY ?? '0') ?? 0),
-                                    FlSpot(2, double.tryParse(motionZ ?? '0') ?? 0),
-                                  ],
-                                  isCurved: true,
-                                  colors: [
-                                    Colors.blue,
-                                    Colors.green,
-                                    Colors.orange,
-                                  ],
-                                ),
-                              ],
-                            ),
-                            swapAnimationDuration: const Duration(milliseconds: 500),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Text(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildInfoCard(
+                  "Body Temperature", temperature, Colors.black, screenHeight),
+              _buildInfoCard(
+                  "Heart Rate (BPM)", bpm, Colors.black, screenHeight),
+              _buildMotionCard(screenHeight),
+              _buildGraph(screenHeight),
+              Text(
                 'Last Updated: $lastUpdated',
-                style: TextStyle(fontSize: 14.0, fontStyle: FontStyle.italic, color: Colors.white),
+                style: TextStyle(
+                  fontSize: screenHeight * 0.015,
+                  fontStyle: FontStyle.italic,
+                  color: Colors.white,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoCard(
+      String title, String? value, Color color, double screenHeight) {
+    return Card(
+      color: Colors.teal.shade100,
+      elevation: 5,
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          vertical: screenHeight * 0.02,
+          horizontal: screenHeight * 0.015,
+        ),
+        child: Column(
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: screenHeight * 0.025,
+                color: color,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: screenHeight * 0.01),
+            Text(
+              value ?? 'Loading...',
+              style: TextStyle(
+                fontSize: screenHeight * 0.03,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMotionCard(double screenHeight) {
+    return Card(
+      elevation: 5,
+      color: Colors.teal.shade100,
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          vertical: screenHeight * 0.02,
+          horizontal: screenHeight * 0.015,
+        ),
+        child: Column(
+          children: [
+            Text(
+              'Motion Activity',
+              style: TextStyle(
+                fontSize: screenHeight * 0.025,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: screenHeight * 0.01),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _buildMotionValue("X", motionX, screenHeight),
+                _buildMotionValue("Y", motionY, screenHeight),
+                _buildMotionValue("Z", motionZ, screenHeight),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMotionValue(String axis, String? value, double screenHeight) {
+    return Column(
+      children: [
+        Text(
+          'Motion $axis',
+          style: TextStyle(
+            fontSize: screenHeight * 0.02,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Text(
+          value ?? 'Loading...',
+          style: TextStyle(
+            fontSize: screenHeight * 0.025,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildGraph(double screenHeight) {
+    return Card(
+      color: Colors.teal.shade100,
+      elevation: 5,
+      child: Padding(
+        padding: EdgeInsets.all(screenHeight * 0.02),
+        child: Column(
+          children: [
+            Text(
+              'Motion Graph',
+              style: TextStyle(
+                fontSize: screenHeight * 0.025,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: screenHeight * 0.01),
+            SizedBox(
+              height: screenHeight * 0.25,
+              child: LineChart(
+                LineChartData(
+                  gridData: FlGridData(show: false),
+                  titlesData: FlTitlesData(show: false),
+                  borderData: FlBorderData(show: false),
+                  lineBarsData: [
+                    LineChartBarData(
+                      spots: [
+                        FlSpot(0, double.tryParse(motionX ?? '0') ?? 0),
+                        FlSpot(1, double.tryParse(motionY ?? '0') ?? 0),
+                        FlSpot(2, double.tryParse(motionZ ?? '0') ?? 0),
+                      ],
+                      isCurved: true,
+                      colors: [Colors.blueAccent],
+                      barWidth: 3,
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),

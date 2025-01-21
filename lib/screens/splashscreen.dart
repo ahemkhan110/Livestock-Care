@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'home_screen.dart';
+import 'dart:ui'; // Add this import for ImageFilter
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -23,51 +24,77 @@ class _SplashScreenState extends State<SplashScreen> {
     });
   }
 
-  @override
-  void dispose() {
-    // Ensure to show the system status bar after leaving the splash screen
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   // Ensure to show the system status bar after leaving the splash screen
+  //   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+  //       overlays: SystemUiOverlay.values);
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
-    // Hide the system status bar
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive, overlays: []);
+    // Show all system overlays (status bar and navigation bar)
+    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+    //     overlays: SystemUiOverlay.values);
 
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.green,
-              Colors.blue,
-            ],
+          image: DecorationImage(
+            image: AssetImage('assets/splash_image.jpg'),
+            fit: BoxFit.cover,
           ),
         ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                'assets/cow_icon.png', // Path to your app logo image file
-                width: 100, // Adjust the width as needed
-                height: 100, // Adjust the height as needed
-              ),
-              SizedBox(height: 20),
-              const Text(
-                'IOT Livestock Care System',
-                style: TextStyle(
-                  fontSize: 24,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
+        child: BackdropFilter(
+          filter: ImageFilter.blur(
+            sigmaX: 3.0,
+            sigmaY: 3.0,
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.2),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 150),
+                        Image.asset(
+                          'assets/farm.png',
+                          width: 320,
+                        ),
+                        SizedBox(height: 20),
+                        const Text(
+                          'Farm Care',
+                          style: TextStyle(
+                            fontSize: 35,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: EdgeInsets.only(bottom: 50),
+                  child: Text(
+                    "IOT solution for health monitoring of livestock",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
